@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Depurador [Beta]</title>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'> -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container"> <!-- Container -->
+      
+      <!-- Header -->
+      <div class="row text-center">
+        <div class="col-sm-12">
+          <h1>Depurador<small> Beta</small></h1>
+          <span id="nombre" class="label-2" style="display:none; font-size: 17px"></span>
+          <span id="identificacion" class="label-2" style="display:none; font-size: 17px"></span>
+          <hr> 
+        </div>
+      </div>
+
+      <!-- Tipo de cliente y Area de negocios -->
+      <div class="row text-center">
+        <div class="col-md-12" id="dropdownInicio">
+          <form>
+            <div class="form-group">
+              <label>
+                Tipo de cliente:
+              </label>
+              <select class="form-control-3" id="dropdownCliente" name="cliente">
+                <option value="fisica">Persona física</option>
+                <option value="juridica">Persona jurídica</option>
+              </select>
+            </div>
+            <div class="form-group">    
+              <label>
+                Área de negocios:
+              </label>
+              <select class="form-control-3" id="dropdownArea" name="cliente">
+                <option value="personal">Personales</option>
+                <option value="empresarial">Empresariales</option>
+                <option value="corporativa">Corporativos</option>
+                <option value="institucional">Institucionales</option>
+              </select>
+            </div>     
+            <button type="button" onclick="aparecerContenido(); cambioPlaceholder(); esconderLegal()" class="btn btn-primary">Iniciar</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-md-12">
+          <span id="tipoCliente" class="label-1" style="display:none; font-size: 17px"></span>
+          <span id="deudor" class="label-1" style="display:none; font-size: 17px"></span>
+          <span id="areaNegocios" class="label-1" style="display:none; font-size: 17px"></span>    
+          <span id="comite" class="label-1" style="display:none; font-size: 17px"></span>
+        </div>
+      </div>
+
+  <div id="desaparecer" style="display:none"> <!-- Div que desaparece todo el contenido -->
+      
+      <hr>
+
+      <!-- Tabs -->
+      <div class="row text-center">
+        <div class="col-xs-12" id="mainTab">
+          <ul class="nav nav-pills" role="tablist">
+            <li class="active"><a href="#cliente" role="tab" data-toggle="tab">Cliente</a></li>
+            <li><a href="#suPre" role="tab" data-toggle="tab">Su-Pre</a></li>
+            <li><a href="#garantia" role="tab" data-toggle="tab">Garantía</a></li>
+            <li><a href="#estadosFinancieros" role="tab" data-toggle="tab">Estados</a></li>
+            <li id="tabLegal"><a href="#documentacionLegal" role="tab" data-toggle="tab">Legal</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="tab-content">
+
+      <!-- Nombre del cliente y RNC/Cedula -->
+      <!-- Comité de desición -->
+      <div class="tab-pane fade in active" id="cliente">
+        <form class="form-horizontal" role="form">
+          <!-- Cliente -->
+          <h3 class="text-center">Cliente</h3>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Nombre</label>
+            <div class="col-sm-10">
+              <input type="text" id="nombreCliente" class="form-control" placeholder="Nombre" onchange="insertarEnHeader('nombreCliente', 'nombre')">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Identificación</label>
+            <div class="col-sm-10">
+              <input type="text" id="idCliente" class="form-control" placeholder="Identificación" onchange="insertarEnHeader('idCliente', 'identificacion')">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Solicitado</label>
+            <div class="col-sm-10">
+              <input type="text" id="montoSol" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Autorizado</label>
+            <div class="col-sm-10">
+              <input type="text" id="montoAut" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Adeudado</label>
+            <div class="col-sm-10">
+              <input type="text" id="montoAdeu" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <!-- Bancos de la competencia -->
+          <h4 class="text-center">Bancos de la competencia</h4>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Autorizado</label>
+            <div class="col-sm-10">
+              <input type="text" id="competenciaAut" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Adeudado</label>
+            <div class="col-sm-10">
+              <input type="text" id="competenciaAdeu" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <!-- Relacionados -->
+          <h4 class="text-center">Relacionados</h4>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Autorizado</label>
+            <div class="col-sm-10">
+              <input type="text" id="relacionadosAut" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Adeudado</label>
+            <div class="col-sm-10">
+              <input type="text" id="relacionadosAdeu" class="form-control dinero" placeholder="0.00">
+            </div>
+          </div>        
+          <!-- Otras condiciones -->
+          <h4 class="text-center">Otras condiciones</h4>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="condicion1" value=""> Liberación o sustitución de garantías hipotecarias o prendarias. <a href="#" data-toggle="modal" data-target="#modal1">Ver más</a>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="condicion2" value=""> Crédito solicitado para compra de bienes inmuebles que sean activos fijos del Banco.
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="condicion3" value=""> Crédito solicitado por persona jurídica en la que un empleado, del Banco o de una de las empresas subsidiarias, posea participación accionaria de un 10% o más, o forme parte del Consejo de Administración, excepto las garantizadas con depósitos en la Institución.
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="condicion4" value=""> Crédito solicitado o garantizado por miembro del Consejo de Directores o por la compañía con la que esté relacionado directa o indirectamente.
+                </label>
+              </div>
+            </div>
+          </div>
+
+      <!-- Botón para determinar comité -->
+          <div class="form-group">
+            <div class="text-center">
+              <button type="button" id="determinarComite" onclick="tamanoDeudor(); checkboxEstadosFinancieros(); checkboxdeclaracionImpuestos(); comiteDoble()" class="btn btn-primary">Determinar comité</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="resultadoComite" style="display:none; text-align:center" class="alert alert-success" role="alert"></div>
+        <div id="alertaComite" style="display:none; text-align:center" class="alert alert-danger" role="alert"></div>
+
+        <div class="text-center">
+          <button class="btn btn-info nexttab" type="button">Siguiente</button>
+        </div>
+      </div>
+      
+      <!-- Checklist para el SU-PRE o solicitud de crédito. -->
+      <div class="tab-pane fade" id="suPre">
+        <form class="form-horizontal" role="form">
+          <h3 class="text-center">SU-PRE</h3>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB1" value=""> ¿Se suministraron dos copias originales del SU-PRE?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB2" value=""> ¿El nombre del cliente aparece igual que en el padrón o el registro mercantil?
+                </label>
+              </div>
+              <div class="checkbox" value="">
+                <label>
+                  <input type="checkbox" id="spCB3" value=""> ¿Fecha de revisión está correcta?
+                  <a href="#" data-toggle="modal" data-target="#modal2">Ver más</a>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB4a" onclick="habilitarCheckbox('spCB4a')" value=""> ¿Tasa o condiciones especiales?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB4" value="" disabled> ¿La autorización de la tasa especial está incluida?
+                </label>
+              </div>              
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB5" value=""> ¿Los ingresos del último semestre son coherentes con los estados financieros?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB6" value=""> ¿Han sido incluidos el Consejo de gerencia y los principales funcionarios?
+                </label>
+              </div>
+              <h4>Detalles de la solicitud</h4>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB7a" onclick="habilitarCheckbox('spCB7a')" value=""> ¿Crédito en cuotas?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB7" value="" disabled> ¿El plazo está acorde al propósito?
+                  <a href="#" data-toggle="modal" data-target="#modal4">Ver más</a>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB8a" onclick="habilitarCheckbox('spCB8a')" value=""> ¿Implica alguna modificación?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB8" value="" disabled> ¿La modificación ha sido expresada?
+                </label>
+              </div>                     
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB9a" onclick="habilitarCheckbox('spCB9a')" value=""> ¿Cambio de garantía?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB9" value="" disabled> ¿El motivo ha sido expresado?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB10" value=""> ¿La recomendación fue completada correctamente? 
+                  <a href="#" data-toggle="modal" data-target="#modal3">Ver más</a>
+                </label>
+              </div>
+
+              <div>
+              <label>
+                <h4>Propósito de la negociación</h4>
+              </label>
+                <!-- <select class="form-control-2" name="negociacion">
+                  <option value="vacio"></option>
+                  <option value="capital">Capital de trabajo</option>
+                  <option value="consolidacion">Consolidación de deudas</option>
+                  <option value="transferencia">Transferencia de deuda</option>
+                  <option value="inversion-fija">Compra de inmueble o remodelación</option>
+                  <option value="otros">ETC</option>
+                </select> -->
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB11a" onclick="habilitarCheckbox('spCB11a')" value=""> ¿Capital de trabajo? 
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB11" value="" disabled> ¿Se detalló para que actividad se utilizará específicamente?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB12a" onclick="habilitarCheckbox2('spCB12', 'spCB13')" value=""> ¿Refinanciamiento de deuda? 
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB12" value="" disabled> ¿Se detalló el o los montos adeudados? 
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB13" value="" disabled> ¿Se mencionó al o los acreedores?
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB14a" onclick="habilitarCheckbox('spCB14a')" value=""> ¿Inversión fija? 
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB14" value="" disabled> ¿Se suministró cotización, presupuesto, tasación y/o acto de venta?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB15a" onclick="habilitarCheckbox4('spCB15','spCB16','spCB17a','spCB18a')" value=""> ¿Adquisición de inmueble?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB15" value="" disabled> ¿Se suministró tasación?
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB16" value="" disabled> ¿Se suministró acto de venta?
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB17a" onclick="habilitarCheckbox('spCB17a')" value="" disabled> ¿El vendedor es una persona jurídica?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB17" value="" disabled> ¿Se suministró la documentación legal del vendedor?
+                </label>
+              </div>                                   
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB18a" onclick="habilitarCheckbox('spCB18a')" value="" disabled> ¿Requiere ser revisado por la Gerencia de Valuaciones? 
+                  <a href="#" data-toggle="modal" data-target="#modal5">Ver más</a>
+                </label>
+              </div>                        
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB18" value="" disabled> ¿Se suministró informe de revisión de la Gerencia de Valuaciones?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB19a" onclick="habilitarCheckbox('spCB19a')" value=""> ¿Existen múltiples destinos?
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB19" value="" disabled> ¿Los destinos totalizan el monto solicitado?
+                </label>
+              </div> 
+              <h4>Información relativa al cliente</h4>               
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB20a" onclick="habilitarCheckbox('spCB20a')"value=""> ¿Posee negocios colaterales con el Banco?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB20" value="" disabled> ¿Fueron mencionados los negocios colaterales que posee con el Banco?
+                </label>
+              </div>              
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB21a" onclick="habilitarCheckbox('spCB21a')" value=""> ¿Posee negocios con la aseguradora del grupo? 
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB21" value="" disabled> ¿Se mencionó el porcentaje de participación de sus pólizas con la aseguradora del grupo?    
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" type="checkbox" id="spCB22a" onclick="habilitarCheckbox('spCB22a')" value=""> ¿Hubo aumento o disminución de los ingresos?
+                </label>
+              </div>               
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB22" value="" disabled> ¿Se presentaron los motivos del aumento o disminución de los ingresos?
+                </label>
+              </div>  
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB23" value=""> ¿Se verificó si posee cartas de crédito, avales o contingencias? 
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB24" value=""> ¿Situación del sector donde se desenvuelve el cliente?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB25" value=""> ¿Se suministró el buró de crédito?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB26" value=""> ¿Se suministró  la central de Riesgos?
+                </label>
+              </div>                                                      
+              <h4>Grupo de riesgo</h4>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB27a" onclick="habilitarCheckbox('spCB27a')" value=""> ¿Pertenece a un grupo de riesgo? 
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB27" value="" disabled> ¿Se indicó a cual grupo de riesgo pertenece?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB28a" onclick="habilitarCheckbox('spCB28a')" value=""> ¿Tiene relacionados? 
+                  <a href="#" data-toggle="modal" data-target="#modal7">Ver más</a>
+                </label>
+              </div>              
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB28" value="" disabled> ¿Sus relacionados están incluidos en el SU-PRE? 
+                </label>
+              </div>                     
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB29a" onclick="habilitarCheckbox('spCB29a')" value=""> ¿Alguno de sus relacionados posee prestamos?
+                </label>
+              </div>  
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="spCB29" value="" disabled> ¿Se suministraron los buró de crédito de los relacionados que poseen financiamientos en el Banco?
+                </label>
+              </div>                  
+
+            </div>
+          </div>
+        </form>
+        <div class="text-center">
+          <button class="btn btn-info prevtab" type="button">Anterior</button>
+          <button class="btn btn-info nexttab" type="button">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- Checklist para garantía. -->
+      <div class="tab-pane fade" id="garantia">
+        <form class="form-horizontal" role="form">
+          <h3 class="text-center">Garantía</h3>
+          <p class="text-center">
+            <button type="button" class="btn btn-default" onclick="sinGarantia()">Sin garantía</button>
+            <button type="button" class="btn btn-default" onclick="unaGarantia()">Una garantía</button>
+            <button type="button" class="btn btn-default" onclick="multiplesGarantias()">Múltiples garantías</button>
+          </p>
+
+          <div class="text-center" id="sinGarantia" style="display:none"><br>
+            <p>A sola firma, sin garantía específica.</p>
+            <p>Nada que verificar.</p>
+          </div>  
+
+            <div class="text-center" id="divNumeroGarantias" style="display:none">
+              <p class="help-block">Actualmente el reporte de depuración a generarse sólo reconoce la primera garantía.</p>
+              <label>Número de garantías</label>
+              <select class="form-control-3" id="numeroGarantias" onchange="cantidadGarantias()">
+                <option value="vacio"></option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div><br>
+
+          <div id="elementosGarantias1" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia1" onchange="tipoGarantia('dropdownGarantia1', 'garantiaHipotecaria1', 'garantiaPrendaria1', 'garantiaSolidaria1')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria1" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB5a" onclick="habilitarCheckbox('gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB6a" onclick="habilitarCheckbox('gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria1" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria1" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="gCB9" value=""> ¿Se suministraron los estados financieros del garante correspondientes a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div id="elementosGarantias2" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia2" onchange="tipoGarantia('dropdownGarantia2', 'garantiaHipotecaria2', 'garantiaPrendaria2', 'garantiaSolidaria2')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria2" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB5a" onclick="habilitarCheckbox('2gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB6a" onclick="habilitarCheckbox('2gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria2" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria2" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="2gCB9" value=""> ¿Se suministraron los estados financieros correspondiente a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="elementosGarantias3" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia3" onchange="tipoGarantia('dropdownGarantia3', 'garantiaHipotecaria3', 'garantiaPrendaria3', 'garantiaSolidaria3')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria3" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB5a" onclick="habilitarCheckbox('3gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB6a" onclick="habilitarCheckbox('3gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria3" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria3" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="3gCB9" value=""> ¿Se suministraron los estados financieros correspondiente a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="elementosGarantias4" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia4" onchange="tipoGarantia('dropdownGarantia4', 'garantiaHipotecaria4', 'garantiaPrendaria4', 'garantiaSolidaria4')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria4" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB5a" onclick="habilitarCheckbox('4gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB6a" onclick="habilitarCheckbox('4gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria4" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria4" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="4gCB9" value=""> ¿Se suministraron los estados financieros correspondiente a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="elementosGarantias5" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia5" onchange="tipoGarantia('dropdownGarantia5', 'garantiaHipotecaria5', 'garantiaPrendaria5', 'garantiaSolidaria5')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria5" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB5a" onclick="habilitarCheckbox('5gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB6a" onclick="habilitarCheckbox('5gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria5" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria5" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="5gCB9" value=""> ¿Se suministraron los estados financieros correspondiente a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="elementosGarantias6" style="display:none">
+          
+            <div class="text-center">
+              <select class="form-control-3" id="dropdownGarantia6" onchange="tipoGarantia('dropdownGarantia6', 'garantiaHipotecaria6', 'garantiaPrendaria6', 'garantiaSolidaria6')">
+                <option value="vacio"></option>
+                <option value="hipotecaria">Hipotecaria</option>
+                <option value="prendaria">Prendaria</option>
+                <option value="solidaria">Solidaria</option>
+              </select>
+            </div>
+                  
+            <div class="form-group">
+              <div class="col-md-offset-1 col-md-11">
+                <!-- Hipotecaria -->   
+                <div id="garantiaHipotecaria6" style="display:none">            
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB1" value=""> ¿La tasación esta vigente? <a href="#" data-toggle="modal" data-target="#modal6">Ver más</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB2" value=""> ¿El tasador esta autorizado por el Banco?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB3" value=""> ¿Los cálculos realizados por el tasador están correctos?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB4" value=""> ¿Se suministró el certificado de título del propietario?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB5a" onclick="habilitarCheckbox('6gCB5a')" value=""> ¿Presenta alguna hipoteca? 
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB5" value="" disabled> ¿Se recomendó en el Su-pre el desembolso con excepción?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB6a" onclick="habilitarCheckbox('6gCB6a')" value=""> ¿El inmueble está asegurado?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB6" value="" disabled> ¿Se menciona con qué compañía y por qué monto está asegurada?
+                    </label>
+                  </div>                                    
+                </div>  
+                <!-- Prendaria -->  
+                <div id="garantiaPrendaria6" style="display:none">                
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB7" value=""> ¿Se suministró cotización, tasación por tasador autorizado, acto de venta o detalle y valor en caso de consistir en inventario?
+                    </label>
+                  </div>
+                </div>
+                <!-- Solidaria -->               
+                <div id="garantiaSolidaria6" style="display:none">                      
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB8" value=""> ¿Se menciona quién es el garante, qué relación tiene con el solicitante y a qué se dedica?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="6gCB9" value=""> ¿Se suministraron los estados financieros correspondiente a su último cierre fiscal? 
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>                    
+
+        <div class="text-center">
+          <button class="btn btn-info prevtab" type="button">Anterior</button>
+          <button class="btn btn-info nexttab" type="button">Siguiente</button>
+        </div>
+
+        </form>
+
+      </div>
+
+      <!-- Estados Financieros -->
+      <div class="tab-pane fade" id="estadosFinancieros">
+        <form class="form-horizontal" role="form">
+          <h3 class="text-center">Estados financieros</h3>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB1" value="" disabled> ¿Se suministraron estados financieros firmados por el cliente? Si el cliente es nuevo debe suministrar los estados financieros de los últimos tres cierres fiscales.
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB2" value="" disabled> ¿Se suministraron estados financieros preparados por un Contador Público Autorizado? Si el cliente es nuevo debe suministrar los estados financieros de los últimos tres cierres fiscales.
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB3" value="" disabled> ¿Se suministraron estados financieros preparados por un Contador Público Autorizado independiente? Si el cliente es nuevo debe suministrar los estados financieros de los últimos tres cierres fiscales.
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB4" value="" disabled> ¿Se suministraron estados financieros auditados preparados por una firma de auditoría independiente? Si el cliente es nuevo debe suministrar los estados financieros de los últimos tres cierres fiscales.
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB5" value="" disabled> ¿Los estados financieros auditados están sellados por la firma de auditores y contienen el dictamen de la misma?
+                </label>
+              </div>  
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB6" value="" disabled> ¿Se suministró declaración de impuestos sobre la renta? Los montos deben coincidir con los presentados en los estados financieros o de lo contrario la clasificación del cliente se verá afectada.
+                </label>
+              </div> 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB7" value=""> ¿La fecha de cierre concuerda con la indicada en la documentación legal?
+                </label>
+              </div>            
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB8a" onclick="habilitarCheckbox('efCB8a')" value=""> ¿Han pasado más de seis meses luego del último cierre?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB8" value="" disabled> ¿Se suministró corte provisional a fecha reciente?
+                </label>
+              </div>            
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB9a" onclick="habilitarCheckbox('efCB9a')" value=""> ¿Han pasado más de doce meses luego del último cierre?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB9" value="" disabled> ¿Se suministraron estados gerenciales?
+                </label>
+              </div>            
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB10" value=""> ¿Las deudas reportadas en el buró de crédito concuerda con las presentadas en los estados financieros?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB11" value=""> ¿El capital social presentado en los estados financieros corresponde al reportado en el registro mercantil?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB12" value=""> ¿En todos los estados financieros suministrados las utilidades acumuladas son iguales a la suma de las utilidades del período anterior más las utilidades acumuladas del periodo anterior? En caso de no ser iguales se debe presentar el motivo de la diferencia en el estado de cambios al patrimonio.
+                </label>
+              </div>
+             <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB13a" onclick="habilitarCheckbox('efCB13a')" value=""> ¿Los estados financieros presentan reducciones o aumentos significativos?
+                </label>
+              </div>               
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="efCB13" value="" disabled> ¿Se mencionaron los motivos de estas variaciones?
+                </label>
+              </div>                           
+            </div>
+          </div>
+        </form>
+        <div class="text-center">
+          <button class="btn btn-info prevtab" type="button">Anterior</button>
+          <button class="btn btn-info nexttab" type="button" id="nextGarantia">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- Documentación legal -->
+      <div class="tab-pane fade" id="documentacionLegal">
+        <form class="form-horizontal" role="form">
+          <h3 class="text-center">Documentación legal</h3>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB1" value=""> ¿Se suministró registro mercantil vigente?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB2" value=""> ¿Se suministró nómina de socios o accionistas reciente?
+
+                </label>
+              </div>            
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB3" value=""> ¿Se suministró acta de asamblea que nombre o ratifique la gerencia actual?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB4" value=""> ¿Se suministró acta de asamblea a través de la cual se autorice la solicitud del financiamiento?
+                </label>
+              </div>            
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB5" value=""> ¿Se suministraron los estatutos sociales?
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB6a" onclick="habilitarCheckbox('dlCB6a')" value=""> ¿Aumentos de capital, venta de acciones, cambio de fecha de cierre o cambio de nombre comercial en algunos de los últimos cierres anteriores? 
+                </label>
+              </div>  
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="dlCB6" value="" disabled> ¿Se suministró la documentación legal que soporte estas transacciones?
+                </label>
+              </div>                     
+            </div>
+          </div>
+        </form>
+        <div class="text-center">
+          <button class="btn btn-info prevtab" type="button">Anterior</button>
+        </div>
+      </div>
+      </div>
+      
+      <hr>
+
+      <!-- Generar reporte -->
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <button type="button" onclick="generarReporte()" class="btn btn-success btn-sm">Generar reporte</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="reiniciarApp()">Reiniciar</button>
+        </div>
+      </div>
+  </div> <!-- Div que desaparece todo el contenido -->
+
+      <!-- Footer -->
+      <hr>
+      <div class="row">
+        <div class="col-sm-12 text-center">
+            <h4>Depurador<small> Beta</small></h4>
+            <p>Basado en la Política de Crédito y el REA.</p>
+        </div>
+      </div>
+
+  </div> <!-- Container -->
+
+    <!-- Modales -->
+
+    <!-- Otras Condiciones -->
+    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Liberación de garantías</h4>
+          </div>
+          <div class="modal-body">
+            <p align="justify">Liberación o sustitución de garantías que respalden préstamos aprobados por límites inferiores al Comité Superior de Crédito irán a este comité, mientras que los aprobados por el Comité Superior se presentarán ante el Consejo de Directores.</p> 
+            <p align="justify">La eliminación de garantía solidaria o sustitución de garantía solidaria por otra solidaria o por una hipotecaria, será conocida por el órgano que aprobó la facilidad de crédito. Exceptuando, las aprobadas por el límite del gerente que serán conocidas por el órgano de decisión que le sigue en jerarquía</p> 
+            <p>Política de crédito, págs. 34 y 37.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fecha de revisión -->
+    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Fecha de revisión</h4>
+          </div>
+          <div class="modal-body">
+            <p>La fecha de revisión se determina según... </p> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recomendación -->
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Recomendación</h4>
+          </div>
+          <div class="modal-body">
+            <p>La recomendación por parte del área tramitadora debe incluir... </p> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plazo según propósito -->
+    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Plazos según propósitos</h4>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li>Préstamo para adquisición de vivienda, hasta 20 años.</li>
+              <li>Préstamo para adquisición de local comercial, hasta 10 años.</li>
+              <li>Préstamo para adquisición de solar, hasta 5 años.</li>
+              <li>Préstamo comercial para refinanciamiento de deuda, hasta 0 años.</li>
+              <li>Préstamo comercial para capital de trabajo, hasta 0 años.</li>
+              <li>Préstamo para adquisición de vehículo nuevo, hasta 5 años.</li>
+              <li>Préstamo de consumo, hasta 3 años.</li>
+            </ul> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revisión de tasación -->
+    <div class="modal fade" id="modal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Revisión de tasación</h4>
+          </div>
+          <div class="modal-body">
+            <p>Una tasación deber ser revisada por la Gerencia de Valuaciones si...</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vencimiento de tasación -->
+    <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Vencimiento de tasación</h4>
+          </div>
+          <div class="modal-body">
+            <p>La tasación no debe tener más de 18 meses de antiguedad.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>    
+
+    <!-- Relación socios o accionistas -->
+    <div class="modal fade" id="modal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Relacionados</h4>
+          </div>
+          <div class="modal-body">
+            <p>En el caso de las personas jurídicas los directivos y socios o accionistas con una participación mayor al 10% se consideran relacionados.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18337041-2', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/funciones.js"></script>
+    <script src="js/bootstrap-switch.js"></script>
+    <script src="js/jquery.mask.min.js"></script>
+    <script src="js/funcionesquery.js"></script>
+    <script type="text/javascript" src="js/jspdf.min.js"></script>
+    <!-- <script type="text/javascript" src="js/basic.js"></script> -->
+  </body>
+</html>
