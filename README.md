@@ -1,4 +1,4 @@
-# Depurador
+# Depurador [Beta]
 Custom checklist web app to facilitate the depuration of an application for a credit. 
 
 Made using Bootstrap.
